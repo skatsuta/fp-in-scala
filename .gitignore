@@ -19,6 +19,8 @@ project/plugins/project/
 # Intellij
 .idea/
 *.iml
+*.ipr
+*.iws
 
 # Gradle
 .gradle
