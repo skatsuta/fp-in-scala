@@ -30,4 +30,10 @@ class MyListSpec extends Specification with ScalaCheck {
       (xs: List[Int], n: Int) => MyList.drop(xs, n) must_== xs.drop(n)
     }
   }
+
+  "dropWhile" should {
+    "remove elements from a list prefix as long as they match a predicate" ! forAll {
+      (xs: List[Int], f: Int => Boolean) => MyList.dropWhile(xs, f) must_== xs.dropWhile(f)
+    }
+  }
 }
