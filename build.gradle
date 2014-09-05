@@ -15,10 +15,12 @@ repositories {
 tasks.withType(ScalaCompile) {
     scalaCompileOptions.useCompileDaemon = false
     scalaCompileOptions.useAnt = false
+    configure(scalaCompileOptions.forkOptions) {
+        memoryMaximumSize = '1g'
+    }
 }
 
 dependencies {
     compile "org.scala-lang:scala-library:$scalaVersion.0"
     testCompile "org.specs2:specs2_$scalaVersion:$spec2Version"
 }
-
