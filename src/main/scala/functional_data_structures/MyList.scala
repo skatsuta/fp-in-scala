@@ -68,4 +68,26 @@ object MyList extends {
     case Nil | (_ :: Nil) => Nil
     case _ => xs.head :: init(xs.tail)
   }
+
+  def dropWhile2[T](xs: List[T])(f: T => Boolean): List[T] = xs match {
+    case x :: xs1 if f(x) => dropWhile2(xs1)(f)
+    case _ => xs
+  }
+
+  def foldRight[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U = xs match {
+    case Nil => acc
+    case x :: xs1 => f(x, foldRight(xs1)(acc)(f))
+  }
+
+  def sum2(xs: List[Int]): Int = foldRight(xs)(0)(_ + _)
+
+  def product2(xs: List[Double]): Double = foldRight(xs)(1.0)(_ * _)
+
+  // *** Exercise 3.7 ***
+  // Can short-circuit because we can check the condition before calculating
+  def product3(xs: List[Double]): Double = xs match {
+    case Nil => 1.0
+    case x :: _ if x == 0.0 => 0.0
+    case x :: xs1 => x * product3(xs1)
+  }
 }

@@ -10,42 +10,65 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.tail(Nil) must_== Nil
     }
 
-    "return a list except the first element" ! forAll {
-      xs: List[Int] => xs.nonEmpty ==> (MyList.tail(xs) == xs.tail)
+    "return a list except the first element" ! forAll { xs: List[Int] =>
+      xs.nonEmpty ==> (MyList.tail(xs) == xs.tail)
     }
   }
 
   "setHead" should {
-    "return Nil when applied to Nil" ! forAll {
-      n: Int => MyList.drop(Nil, n) must_== Nil
+    "return Nil when applied to Nil" ! forAll { n: Int =>
+      MyList.drop(Nil, n) must_== Nil
     }
 
-    "replace the first element" ! forAll {
-      (xs: List[Int], x: Int) => xs.nonEmpty ==> (MyList.setHead(xs, x) == x :: xs.tail)
+    "replace the first element" ! forAll { (xs: List[Int], x: Int) =>
+      xs.nonEmpty ==> (MyList.setHead(xs, x) == x :: xs.tail)
     }
   }
 
   "drop" should {
-    "remove the first n elements from a list" ! prop {
-      (xs: List[Int], n: Int) => MyList.drop(xs, n) must_== xs.drop(n)
+    "remove the first n elements from a list" ! forAll { (xs: List[Int], n: Int) =>
+      MyList.drop(xs, n) must_== xs.drop(n)
     }
   }
 
   "dropWhile" should {
-    "remove elements from a list prefix as long as they match a predicate" ! forAll {
-      (xs: List[Int], f: Int => Boolean) => MyList.dropWhile(xs, f) must_== xs.dropWhile(f)
+    "remove elements from a list prefix as long as they match a predicate" !
+      forAll { (xs: List[Int], f: Int => Boolean) =>
+        MyList.dropWhile(xs, f) must_== xs.dropWhile(f)
     }
   }
 
   "append" should {
-    "add one list to the end of another" ! prop {
-      (xs1: List[Int], xs2: List[Int]) => MyList.append(xs1, xs2) must_== xs1 ++ xs2
+    "add one list to the end of another" ! forAll { (xs1: List[Int], xs2: List[Int]) =>
+      MyList.append(xs1, xs2) must_== xs1 ++ xs2
     }
   }
 
   "init" should {
-    "returns a List consisting of all but the last element of a List" ! forAll {
-      xs: List[Int] => xs.nonEmpty ==> (MyList.init(xs) == xs.init)
+    "return a List consisting of all but the last element of a List" ! forAll { xs: List[Int] =>
+      xs.nonEmpty ==> (MyList.init(xs) == xs.init)
+    }
+  }
+
+  "foldRight" should {
+    "reduce the list using the binary operator from right to left" !
+        forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
+          MyList.foldRight(xs)(acc)((x, y) => x + y) must_== xs.foldRight(acc)((x, y) => x + y)
+    }
+  }
+
+  "product3" should {
+    //===== Exercise 3.7 =====
+    // Couldn't pass the test below because GenTraversable#product is implemented by foldLeft
+    // (the product of huge numbers returns Double.NaN,
+    //     but short-circuiting could return 0 if it contains 0)
+    //"compute the product of a list of numbers" ! forAll {
+    //  xs: List[Double] => MyList.product3(xs) must_== xs.product
+    //}
+
+    //===== Exercise 3.8 =====
+    "combine two lists" ! forAll { xs: List[Int] =>
+      MyList.foldRight(xs)(Nil: List[Int])(_ :: _) must_== xs
     }
   }
 }
