@@ -140,4 +140,8 @@ object MyList extends {
 
   //===== Exercise 3.12 =====
   def reverse[A](xs: List[A]): List[A] = foldLeft(xs)(List[A]())((acc, x) => x :: acc)
+
+  //===== Exercise 3.13 =====
+  def foldRight2[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U =
+    foldLeft(reverse(xs))(acc)((x, y) => f(y, x))
 }

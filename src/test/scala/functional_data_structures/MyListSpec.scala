@@ -53,7 +53,7 @@ class MyListSpec extends Specification with ScalaCheck {
   "foldRight" should {
     "reduce the list using the binary operator from right to left" !
         forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
-          MyList.foldRight(xs)(acc)((x, y) => x + y) must_== xs.foldRight(acc)((x, y) => x + y)
+          MyList.foldRight(xs)(acc)(_ + _) must_== xs.foldRight(acc)(_ + _)
     }
   }
 
@@ -83,7 +83,7 @@ class MyListSpec extends Specification with ScalaCheck {
   "foldLeft" should {
     "reduce the list using the binary operator, from left to right" !
       forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
-        MyList.foldLeft(xs)(acc)((x, y) => x + y) must_== xs.foldLeft(acc)((x, y) => x + y)
+        MyList.foldLeft(xs)(acc)(_ + _) must_== xs.foldLeft(acc)(_ + _)
     }
   }
 
@@ -112,4 +112,13 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.reverse(xs) must_== xs.reverse
     }
   }
+
+  //====== Exercise 3.13 =====
+  "foldRight2" should {
+    "reduce the list using the binary operator from right to left" !
+      forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
+        MyList.foldRight2(xs)(acc)(_ + _) must_== xs.foldRight(acc)(_ + _)
+    }
+  }
+
 }
