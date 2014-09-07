@@ -105,4 +105,11 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.length2(xs) must_== xs.length
     }
   }
+
+  //===== Exercise 3.12 =====
+  "reverse" should {
+    "return a new list with elements in reversed order" ! forAll { xs: List[Int] =>
+      MyList.reverse(xs) must_== xs.reverse
+    }
+  }
 }

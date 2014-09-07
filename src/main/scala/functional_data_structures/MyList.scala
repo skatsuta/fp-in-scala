@@ -71,7 +71,7 @@ object MyList extends {
   }
 
   def init[T](xs: List[T]): List[T] = xs match {
-    case Nil | (_ :: Nil) => Nil
+    case Nil | List(_) => Nil
     case _ => xs.head :: init(xs.tail)
   }
 
@@ -136,4 +136,8 @@ object MyList extends {
   def sum(xs: List[Int]): Int = foldLeft(xs)(0)(_ + _)
   def product(xs: List[Double]): Double = foldLeft(xs)(1.0)(_ * _)
   def length2[A](xs: List[A]): Int = foldLeft(xs)(0)((acc, _) => acc + 1)
+
+
+  //===== Exercise 3.12 =====
+  def reverse[A](xs: List[A]): List[A] = foldLeft(xs)(List[A]())((acc, x) => x :: acc)
 }
