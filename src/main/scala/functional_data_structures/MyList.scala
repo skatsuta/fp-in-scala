@@ -55,16 +55,17 @@ object MyList extends {
     // loop(this)
   }
 
-  def append[T](xs1: List[T], xs2: List[T]): List[T] = {
-    xs1 match {
-      case Nil => xs2
-      case x :: xs => x :: append(xs, xs2)
-    }
+  def append[T](xs1: List[T], xs2: List[T]): List[T] = xs1 match {
+    case Nil => xs2
+    case x :: xs => x :: append(xs, xs2)
 
     // another implementation
     // if (xs1.isEmpty) xs2
     // else xs1.head :: append(xs.tail, xs2)
   }
 
-
+  def init[T](xs: List[T]): List[T] = xs match {
+    case Nil | (_ :: Nil) => Nil
+    case _ => xs.head :: init(xs.tail)
+  }
 }

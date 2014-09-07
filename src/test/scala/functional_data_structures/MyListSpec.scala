@@ -42,4 +42,10 @@ class MyListSpec extends Specification with ScalaCheck {
       (xs1: List[Int], xs2: List[Int]) => MyList.append(xs1, xs2) must_== xs1 ++ xs2
     }
   }
+
+  "init" should {
+    "returns a List consisting of all but the last element of a List" ! forAll {
+      xs: List[Int] => xs.nonEmpty ==> (MyList.init(xs) == xs.init)
+    }
+  }
 }
