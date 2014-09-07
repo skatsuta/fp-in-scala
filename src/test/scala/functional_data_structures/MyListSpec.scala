@@ -71,4 +71,19 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.foldRight(xs)(Nil: List[Int])(_ :: _) must_== xs
     }
   }
+
+  //===== Exercise 3.9 =====
+  "length" should {
+    "is the length of the sequence" ! forAll { xs: List[Int] =>
+      MyList.length(xs) must_== xs.length
+    }
+  }
+
+  //===== Exercise 3.10 =====
+  "foldLeft" should {
+    "reduce the list using the binary operator, from left to right" !
+      forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
+        MyList.foldLeft(xs)(acc)((x, y) => x + y) must_== xs.foldLeft(acc)((x, y) => x + y)
+    }
+  }
 }

@@ -77,6 +77,10 @@ object MyList extends {
   def foldRight[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U = xs match {
     case Nil => acc
     case x :: xs1 => f(x, foldRight(xs1)(acc)(f))
+
+    // TraversableOnce#foldRight[B](acc: B)(f: (A, B) => B): B
+    //-------------------------------------------------------
+    // reversed.foldLeft(acc)((x, y) => f(y, x))
   }
 
   def sum2(xs: List[Int]): Int = foldRight(xs)(0)(_ + _)
@@ -89,5 +93,37 @@ object MyList extends {
     case Nil => 1.0
     case x :: _ if x == 0.0 => 0.0
     case x :: xs1 => x * product3(xs1)
+
+    // GenTraversableOnce#product(List[])
+    //------------------------------------
+    // def product[B >: A](implicit num: Numeric[B]) = foldLeft(num.one)(num.times)
+  }
+
+
+  //===== Exercise 3.9 =====
+  def length[T](xs: List[T]): Int = foldRight(xs)(0)((_, acc) => acc + 1)
+
+    // LinearSeqOptimized#length(List[T])
+    //------------------------------------
+    // var these = self
+    // var len = 0
+    // while(!these.isEmpty) {
+    //   len += 1
+    //   these = these.tail
+    // }
+    // len
+
+
+  //===== Exercise 3.10 =====
+  @annotation.tailrec
+  def foldLeft[A, B](xs: List[A])(acc: B)(f: (B, A) => B): B = xs match {
+    case Nil      => acc
+    case x :: xs1 => foldLeft(xs1)(f(acc, x))(f)
+
+    // TraversableOnce#foldLeft[A, B](acc: B)(f: (B, A) => B): B = {
+    //   var result = acc
+    //   this foreach (x => result = f(result, x))
+    //   result
+    // }
   }
 }
