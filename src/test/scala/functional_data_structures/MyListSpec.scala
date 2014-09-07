@@ -121,4 +121,15 @@ class MyListSpec extends Specification with ScalaCheck {
     }
   }
 
+  //===== Exercise 3.14 =====
+  "append2" should {
+    "add one list to the end of another" ! forAll { (xs1: List[Int], xs2: List[Int]) =>
+      MyList.append2(xs1, xs2) must_== xs1 ++ xs2
+    }
+  }
+  "append3" should {
+    "add one list to the end of another" ! forAll { (xs1: List[Int], xs2: List[Int]) =>
+      MyList.append2(xs1, xs2) must_== xs1 ++ xs2
+    }
+  }
 }

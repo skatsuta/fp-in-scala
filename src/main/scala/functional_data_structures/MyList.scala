@@ -144,4 +144,9 @@ object MyList extends {
   //===== Exercise 3.13 =====
   def foldRight2[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U =
     foldLeft(reverse(xs))(acc)((x, y) => f(y, x))
+
+  //===== Exercise 3.14 =====
+  def append2[T](xs1: List[T], xs2: List[T]): List[T] = foldRight2(xs1)(xs2)(_ :: _)
+  def append3[T](xs1: List[T], xs2: List[T]): List[T] = foldLeft(xs2)(xs1)((acc, x) => x :: acc)
+
 }
