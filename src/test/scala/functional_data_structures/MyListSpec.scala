@@ -74,7 +74,7 @@ class MyListSpec extends Specification with ScalaCheck {
 
   //===== Exercise 3.9 =====
   "length" should {
-    "is the length of the sequence" ! forAll { xs: List[Int] =>
+    "be the length of the sequence" ! forAll { xs: List[Int] =>
       MyList.length(xs) must_== xs.length
     }
   }
@@ -84,6 +84,25 @@ class MyListSpec extends Specification with ScalaCheck {
     "reduce the list using the binary operator, from left to right" !
       forAll { (xs: List[Int], acc: Int, x: Int, y: Int) =>
         MyList.foldLeft(xs)(acc)((x, y) => x + y) must_== xs.foldLeft(acc)((x, y) => x + y)
+    }
+  }
+
+  //===== Exercise 3.11 =====
+  "sum" should {
+    "sum up all the elements" ! forAll { xs: List[Int] =>
+      MyList.sum(xs) must_== xs.sum
+    }
+  }
+
+  "product" should {
+    "multiplies up all the elements" ! forAll { xs: List[Double] =>
+      !xs.product.isNaN ==> (MyList.product(xs) == xs.product)
+    }
+  }
+
+  "length2" should {
+    "be the length of the sequence" ! forAll { xs: List[String] =>
+      MyList.length2(xs) must_== xs.length
     }
   }
 }

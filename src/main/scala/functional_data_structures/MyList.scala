@@ -59,9 +59,15 @@ object MyList extends {
     case Nil => xs2
     case x :: xs => x :: append(xs, xs2)
 
-    // another implementation
+    // Another implementation
+    //------------------------
     // if (xs1.isEmpty) xs2
     // else xs1.head :: append(xs.tail, xs2)
+
+    // List#:::[B >: A](prefix: List[A]): List[B] =
+    //   if (isEmpty) prefix
+    //   else if (prefix.isEmpty) this
+    //   else (new ListBuffer[B] ++= prefix).prependToList(this)
   }
 
   def init[T](xs: List[T]): List[T] = xs match {
@@ -78,9 +84,8 @@ object MyList extends {
     case Nil => acc
     case x :: xs1 => f(x, foldRight(xs1)(acc)(f))
 
-    // TraversableOnce#foldRight[B](acc: B)(f: (A, B) => B): B
-    //-------------------------------------------------------
-    // reversed.foldLeft(acc)((x, y) => f(y, x))
+    // TraversableOnce#foldRight[B](acc: B)(f: (A, B) => B): B =
+    //   reversed.foldLeft(acc)((x, y) => f(y, x))
   }
 
   def sum2(xs: List[Int]): Int = foldRight(xs)(0)(_ + _)
@@ -126,4 +131,9 @@ object MyList extends {
     //   result
     // }
   }
+
+  //===== Exercise 3.11 =====
+  def sum(xs: List[Int]): Int = foldLeft(xs)(0)(_ + _)
+  def product(xs: List[Double]): Double = foldLeft(xs)(1.0)(_ * _)
+  def length2[A](xs: List[A]): Int = foldLeft(xs)(0)((acc, _) => acc + 1)
 }
