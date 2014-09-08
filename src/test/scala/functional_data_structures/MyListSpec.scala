@@ -134,11 +134,14 @@ class MyListSpec extends Specification with ScalaCheck {
   }
 
   //===== Exercise 3.15 =====
-  //"concat" should {
-  //  "concatenate a list of lists into a single list" ! forAll { (xs: List[Int], ys: List[Int]) =>
-  //    MyList.concat(List(xs, ys)) must_== xs ::: ys
-  //  }
-  //}
+  "concat" should {
+    "concatenate a list of lists into a single list" !
+      forAll { (xs: List[Int], ys: List[Int], zs: List[Int]) => {
+        val xss = List(xs, ys, zs)
+        MyList.concat(xss) must_== xss.flatten
+      }
+    }
+  }
 
   //===== Exercise 3.16 =====
   "addOne" should {
