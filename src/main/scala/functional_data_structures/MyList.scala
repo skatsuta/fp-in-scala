@@ -158,6 +158,10 @@ object MyList extends {
 
   //===== Exercise 3.16 =====
   def addOne(xs: List[Int]): List[Int] = xs map (_ + 1)
-  // def addOne(xs: List[Int]): List[Int] = xs.foldRight(List[Int]())((x, l) => (x + 1) :: l)
-  // 単純な再帰では末尾再帰にならないので効率が悪い
+    // Another implementation
+    // def addOne(xs: List[Int]): List[Int] = xs.foldRight(List[Int]())((x, l) => (x + 1) :: l)
+    // 単純な再帰では末尾再帰にならないので効率が悪い
+
+  //===== Exercise 3.17 =====
+  def toStrings[A](xs: List[A]): List[String] = xs map (_.toString)
 }

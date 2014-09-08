@@ -146,4 +146,11 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.addOne(xs) must_== (for (x <- xs) yield x + 1)
     }
   }
+
+  //===== Exercise 3.17 =====
+  "toStrings" should {
+    "turn each value in a list into a string" ! forAll { xs: List[Double] =>
+      (MyList toStrings xs) must_== (for (x <- xs) yield x.toString)
+    }
+  }
 }
