@@ -132,4 +132,18 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.append2(xs1, xs2) must_== xs1 ++ xs2
     }
   }
+
+  //===== Exercise 3.15 =====
+  //"concat" should {
+  //  "concatenate a list of lists into a single list" ! forAll { (xs: List[Int], ys: List[Int]) =>
+  //    MyList.concat(List(xs, ys)) must_== xs ::: ys
+  //  }
+  //}
+
+  //===== Exercise 3.16 =====
+  "addOne" should {
+    "transform a list of integers by adding 1 to each element" ! forAll { xs: List[Int] =>
+      MyList.addOne(xs) must_== (for (x <- xs) yield x + 1)
+    }
+  }
 }
