@@ -156,4 +156,12 @@ class MyListSpec extends Specification with ScalaCheck {
       (MyList toStrings xs) must_== (for (x <- xs) yield x.toString)
     }
   }
+
+  //===== Exercise 3.18 =====
+  "map" should {
+    "modify each element in a list while maintaining the structure of the list" !
+      forAll { xs: List[Int] =>
+        MyList.map(xs)(_ + 1) must_== xs.map(_ + 1)
+      }
+  }
 }

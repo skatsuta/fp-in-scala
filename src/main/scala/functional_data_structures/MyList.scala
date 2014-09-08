@@ -163,5 +163,9 @@ object MyList extends {
 
   //===== Exercise 3.17 =====
   def toStrings[A](xs: List[A]): List[String] = xs map (_.toString)
-  //def toStrings[A](xs: List[A]): List[String] = xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
+  //def toStrings[A](xs: List[A]): List[String] =
+  //   xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
+
+  //===== Exercise 3.18 =====
+  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())((x, acc) => f(x) :: acc)
 }
