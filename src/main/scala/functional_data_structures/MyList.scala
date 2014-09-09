@@ -211,8 +211,6 @@ object MyList extends {
 
   def zipWithPlus(xs: List[Int])(ys: List[Int]): List[Int] = zipWith(xs)(ys) { _ + _ }
 
-  val index = 1
-
   //===== Exercise 3.24 =====
   @annotation.tailrec
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = sub match {
