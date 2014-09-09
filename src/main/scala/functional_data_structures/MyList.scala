@@ -166,7 +166,7 @@ object MyList extends {
   //   xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
 
   //===== Exercise 3.18 =====
-  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())((x, acc) => f(x) :: acc)
+  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())(f(_) :: _)
 
   //===== Exercise 3.19 =====
   def filter[A](xs: List[A])(f: A => Boolean): List[A] =
@@ -192,5 +192,10 @@ object MyList extends {
     // }
 
   //===== Exercise 3.20 =====
-  def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = (xs map f).flatten
+  //def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = (xs map f).flatten
+  def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = xs.foldRight(List[B]())(f(_) ::: _)
+
+  //===== Exercise 3.21 =====
+  def filterByFlatMap[A](xs: List[A])(f: A => Boolean): List[A] =
+      flatMap(xs)(x => if (f(x)) List(x) else Nil)
 }

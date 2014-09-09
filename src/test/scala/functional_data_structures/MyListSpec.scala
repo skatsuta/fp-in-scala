@@ -169,7 +169,7 @@ class MyListSpec extends Specification with ScalaCheck {
   "filter" should {
     "remove elements from a list unless they satisfy a given predicate" !
       forAll { xs: List[Int] => {
-        def even: Function[Int, Boolean] = _ % 2 == 0
+        def even(n: Int): Boolean = n % 2 == 0
         MyList.filter(xs)(even) must_== xs.filter(even)
       }
     }
@@ -178,9 +178,20 @@ class MyListSpec extends Specification with ScalaCheck {
   //===== Exercise 3.20 =====
   "flatMap" should {
     "build a new collection by applying a function to all elements of this list" !
-      forAll { xs: List[Int] =>
-        MyList.flatMap(xs)(x => List(x, x)) must_==
-          (for (x <- xs) yield List(x, x)).foldRight(List[Int]())(_ ::: _)
+      forAll { xs: List[Int] => {
+        def f(x: Int): List[Int] = List(x, x)
+        MyList.flatMap(xs)(f) must_== xs.flatMap(f)
       }
+    }
+  }
+
+  //===== Exercise 3.21 =====
+  "filterByFlatMap" should {
+    "remove elements from a list unless they satisfy a given predicate" !
+      forAll { xs: List[Int] => {
+        def odd(n :Int): Boolean = n % 2 != 0
+        MyList.filterByFlatMap(xs)(odd) must_== (xs filter odd)
+      }
+    }
   }
 }
