@@ -203,12 +203,37 @@ object MyList extends {
   def zipWith[A, B, C](xs: List[A])(ys: List[B])(f: (A, B) => C): List[C] =
       xs zip ys map { case (x, y) => f(x, y) }
 
-  def zipWithPlus(xs: List[Int])(ys: List[Int]): List[Int] = zipWith(xs)(ys) { _ + _ }
-
-  // テスト用の別実装
+  // FP in Scala の実装はこれに近い
   def zipWith2[A, B, C](xs: List[A])(ys: List[B])(f: (A, B) => C): List[C] = (xs, ys) match {
     case (x :: xs1, y :: ys1) => f(x, y) :: zipWith2(xs1)(ys1)(f)
     case _ => Nil
   }
 
+  def zipWithPlus(xs: List[Int])(ys: List[Int]): List[Int] = zipWith(xs)(ys) { _ + _ }
+
+  val index = 1
+
+  //===== Exercise 3.24 =====
+  @annotation.tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = sub match {
+    case Nil => true
+    case x :: xs =>
+      val index = sup.indexOf(x)
+      if (index == -1) false
+      else hasSubsequence(sup, xs drop index)
+    case _ => false
+  }
+
+  // Answers in FP in Scala
+  @annotation.tailrec
+  def startsWith[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
+    case (_, Nil) => true
+    case (x :: xs, y :: ys) if x == y => startsWith(xs, ys)
+    case _ => false
+  }
+  def hasSubsequenceAns[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
+    case (_, Nil) => true
+    case _ if startsWith(sup, sub) => true
+    case (_ :: xs, _) => hasSubsequenceAns(xs, sub)
+  }
 }

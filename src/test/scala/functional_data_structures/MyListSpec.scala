@@ -210,4 +210,17 @@ class MyListSpec extends Specification with ScalaCheck {
         MyList.zipWith(xs)(ys) { _ * _ } must_== MyList.zipWith2(xs)(ys) { _ * _ }
       }
   }
+
+  //===== Exercise 3.24 =====
+  "hasSubsequence" should {
+    "check whether a list contains another list as a sub sequence" in {
+      MyList.hasSubsequence(Nil, Nil) must_== true
+      MyList.hasSubsequence(Nil, List(0)) must_== false
+      MyList.hasSubsequence(List(0), Nil) must_== true
+      MyList.hasSubsequence(List(0), List(0)) must_== true
+      MyList.hasSubsequence(List(0), List(1)) must_== false
+      MyList.hasSubsequence(List(0, 1), List(1)) must_== true
+      MyList.hasSubsequence(List(0, 1), List(0, 2)) must_== false
+    }
+  }
 }
