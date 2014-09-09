@@ -146,14 +146,14 @@ class MyListSpec extends Specification with ScalaCheck {
   //===== Exercise 3.16 =====
   "addOne" should {
     "transform a list of integers by adding 1 to each element" ! forAll { xs: List[Int] =>
-      MyList.addOne(xs) must_== (for (x <- xs) yield x + 1)
+      MyList.addOne(xs) must_== { for (x <- xs) yield x + 1 }
     }
   }
 
   //===== Exercise 3.17 =====
   "toStrings" should {
     "turn each value in a list into a string" ! forAll { xs: List[Double] =>
-      (MyList toStrings xs) must_== (for (x <- xs) yield x.toString)
+      (MyList toStrings xs) must_== { for (x <- xs) yield x.toString }
     }
   }
 
@@ -161,7 +161,7 @@ class MyListSpec extends Specification with ScalaCheck {
   "map" should {
     "modify each element in a list while maintaining the structure of the list" !
       forAll { xs: List[Int] =>
-        MyList.map(xs)(_ + 1) must_== xs.map(_ + 1)
+        MyList.map(xs) { _ + 1 } must_== xs.map(_ + 1)
       }
   }
 
@@ -169,9 +169,58 @@ class MyListSpec extends Specification with ScalaCheck {
   "filter" should {
     "remove elements from a list unless they satisfy a given predicate" !
       forAll { xs: List[Int] => {
-        def even: Function[Int, Boolean] = _ % 2 == 0
+        def even(n: Int): Boolean = n % 2 == 0
         MyList.filter(xs)(even) must_== xs.filter(even)
       }
+    }
+  }
+
+  //===== Exercise 3.20 =====
+  "flatMap" should {
+    "build a new collection by applying a function to all elements of this list" !
+      forAll { xs: List[Int] => {
+        def f(x: Int): List[Int] = List(x, x)
+        MyList.flatMap(xs)(f) must_== xs.flatMap(f)
+      }
+    }
+  }
+
+  //===== Exercise 3.21 =====
+  "filterByFlatMap" should {
+    "remove elements from a list unless they satisfy a given predicate" !
+      forAll { xs: List[Int] => {
+        def odd(n :Int): Boolean = n % 2 != 0
+        MyList.filterByFlatMap(xs)(odd) must_== xs.filter(odd)
+      }
+    }
+  }
+
+  //===== Exercise 3.22 =====
+  "zipWithPlus" should {
+    "accept two lists and construct a new list by adding corresponding elements" !
+      forAll { (xs: List[Int], ys: List[Int]) =>
+        MyList.zipWithPlus(xs)(ys) must_== MyList.zipWith2(xs)(ys) { _ + _ }
+      }
+  }
+
+  //===== Exercise 3.23 =====
+  "zipWith" should {
+    "accept two lists and construct a new list by applying a function to corresponding elements" !
+      forAll { (xs: List[Int], ys: List[Int]) =>
+        MyList.zipWith(xs)(ys) { _ * _ } must_== MyList.zipWith2(xs)(ys) { _ * _ }
+      }
+  }
+
+  //===== Exercise 3.24 =====
+  "hasSubsequence" should {
+    "check whether a list contains another list as a sub sequence" in {
+      MyList.hasSubsequence(Nil, Nil) must_== true
+      MyList.hasSubsequence(Nil, List(0)) must_== false
+      MyList.hasSubsequence(List(0), Nil) must_== true
+      MyList.hasSubsequence(List(0), List(0)) must_== true
+      MyList.hasSubsequence(List(0), List(1)) must_== false
+      MyList.hasSubsequence(List(0, 1), List(1)) must_== true
+      MyList.hasSubsequence(List(0, 1), List(0, 2)) must_== false
     }
   }
 }

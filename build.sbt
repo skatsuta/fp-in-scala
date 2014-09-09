@@ -9,6 +9,7 @@ lazy val root = (project in file(".")).settings(
     "org.scalaz" %% "scalaz-effect" % scalazVersion,
     "org.scalaz" %% "scalaz-typelevel" % scalazVersion,
     "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion % "test"
+  )
 )
 
 scalacOptions += "-feature"
