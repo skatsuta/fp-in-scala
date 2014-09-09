@@ -16,7 +16,7 @@ sealed trait Tree[+A] {  // 型パラメータの前に共変アノテーショ�
 
   //===== Exercise 3.27 =====
   def depth: Int = this match {
-    case Leaf(x) => 1
+    case Leaf(_) => 1
     case Branch(l, r) => (l.depth max r.depth) + 1
     // max の呼び出しより + の呼び出しが優先されるため、max 部分を括弧で囲む必要がある
     // 呼び出しの優先順位はメソッド名の1文字目によって判定され、以下の通り
@@ -38,6 +38,16 @@ sealed trait Tree[+A] {  // 型パラメータの前に共変アノテーショ�
     case Leaf(x) => Leaf(f(x))
     case Branch(l, r) => Branch(l map f, r map f)
   }
+
+  //===== Exercise 3.29 =====
+  def fold[B](f: A => B)(g: (B, B) => B): B = this match {
+    case Leaf(x) => f(x)
+    case Branch(l, r) => g(l.fold(f)(g), r.fold(f)(g))
+  }
+  def sizeViaFold: Int = fold(_ => 1)(_ + _ + 1)
+  //def maximumViaFold(implicit evidence: A =:= Int): Int =  fold(x => x)(_ max _)
+  //def depthViaFold: Int = fold(_ => 1)((_ max _) + 1)
+  def mapViaFold[B](f: A => B): Tree[B] = fold(x => Leaf(f(x)): Tree[B])(Branch(_, _))
 }
 
 case class Leaf[A](value: A) extends Tree[A]

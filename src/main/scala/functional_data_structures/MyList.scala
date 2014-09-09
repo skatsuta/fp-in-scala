@@ -75,6 +75,7 @@ object MyList extends {
     case _ => xs.head :: init(xs.tail)
   }
 
+  @annotation.tailrec
   def dropWhile2[T](xs: List[T])(f: T => Boolean): List[T] = xs match {
     case x :: xs1 if f(x) => dropWhile2(xs1)(f)
     case _ => xs
