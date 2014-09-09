@@ -160,12 +160,34 @@ object MyList extends {
     // Another implementation
     // def addOne(xs: List[Int]): List[Int] = xs.foldRight(List[Int]())((x, l) => (x + 1) :: l)
     // 単純な再帰では末尾再帰にならないので効率が悪い
-
-  //===== Exercise 3.17 =====
+ //===== Exercise 3.17 =====
   def toStrings[A](xs: List[A]): List[String] = xs map (_.toString)
   //def toStrings[A](xs: List[A]): List[String] =
   //   xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
 
   //===== Exercise 3.18 =====
   def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())((x, acc) => f(x) :: acc)
+
+  //===== Exercise 3.19 =====
+  def filter[A](xs: List[A])(f: A => Boolean): List[A] =
+      xs match {
+         case Nil => Nil
+         case x :: xs1 =>
+           if (f(x)) x :: filter(xs1)(f)
+           else filter(xs1)(f)
+      }
+
+    // FP in Scala
+    //-------------
+    // xs.foldRight(List[A]())((x, acc) => if (f(x)) x :: acc else acc)
+
+    // def TraversableLike#filter[A](f: A => Boolean): List[A] = filterImpl(f, isFlipped = false)
+    // def TraversableLike#filterNot[A](f: A => Boolean): List[A] = filterImpl(f, isFlipped = true)
+    // private[scala] def TraversableLike#filterImpl(f: A => Boolean, isFlipped: Boolean) = {
+    //   var b = newBuilder
+    //   for (x <- xs) {
+    //     if (f(x) != isFlipped) b += x
+    //   }
+    //   b.result
+    // }
 }

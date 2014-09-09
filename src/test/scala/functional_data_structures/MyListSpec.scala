@@ -164,4 +164,14 @@ class MyListSpec extends Specification with ScalaCheck {
         MyList.map(xs)(_ + 1) must_== xs.map(_ + 1)
       }
   }
+
+  //===== Exercise 3.19 =====
+  "filter" should {
+    "remove elements from a list unless they satisfy a given predicate" !
+      forAll { xs: List[Int] => {
+        def even: Function[Int, Boolean] = _ % 2 == 0
+        MyList.filter(xs)(even) must_== xs.filter(even)
+      }
+    }
+  }
 }
