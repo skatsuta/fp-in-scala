@@ -132,4 +132,46 @@ class MyListSpec extends Specification with ScalaCheck {
       MyList.append2(xs1, xs2) must_== xs1 ++ xs2
     }
   }
+
+  //===== Exercise 3.15 =====
+  "concat" should {
+    "concatenate a list of lists into a single list" !
+      forAll { (xs: List[Int], ys: List[Int], zs: List[Int]) => {
+        val xss = List(xs, ys, zs)
+        MyList.concat(xss) must_== xss.flatten
+      }
+    }
+  }
+
+  //===== Exercise 3.16 =====
+  "addOne" should {
+    "transform a list of integers by adding 1 to each element" ! forAll { xs: List[Int] =>
+      MyList.addOne(xs) must_== (for (x <- xs) yield x + 1)
+    }
+  }
+
+  //===== Exercise 3.17 =====
+  "toStrings" should {
+    "turn each value in a list into a string" ! forAll { xs: List[Double] =>
+      (MyList toStrings xs) must_== (for (x <- xs) yield x.toString)
+    }
+  }
+
+  //===== Exercise 3.18 =====
+  "map" should {
+    "modify each element in a list while maintaining the structure of the list" !
+      forAll { xs: List[Int] =>
+        MyList.map(xs)(_ + 1) must_== xs.map(_ + 1)
+      }
+  }
+
+  //===== Exercise 3.19 =====
+  "filter" should {
+    "remove elements from a list unless they satisfy a given predicate" !
+      forAll { xs: List[Int] => {
+        def even: Function[Int, Boolean] = _ % 2 == 0
+        MyList.filter(xs)(even) must_== xs.filter(even)
+      }
+    }
+  }
 }

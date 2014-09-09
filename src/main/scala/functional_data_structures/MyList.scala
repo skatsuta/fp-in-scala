@@ -104,7 +104,6 @@ object MyList extends {
     // def product[B >: A](implicit num: Numeric[B]) = foldLeft(num.one)(num.times)
   }
 
-
   //===== Exercise 3.9 =====
   def length[T](xs: List[T]): Int = foldRight(xs)(0)((_, acc) => acc + 1)
 
@@ -117,7 +116,6 @@ object MyList extends {
     //   these = these.tail
     // }
     // len
-
 
   //===== Exercise 3.10 =====
   @annotation.tailrec
@@ -145,8 +143,51 @@ object MyList extends {
   def foldRight2[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U =
     foldLeft(reverse(xs))(acc)((x, y) => f(y, x))
 
+    // List#foldRight[B](acc: B)(f: (B, A) => B): B =
+    //    reverse.foldLeft(acc)((right, left) => f(left, right))
+
   //===== Exercise 3.14 =====
   def append2[T](xs1: List[T], xs2: List[T]): List[T] = foldRight2(xs1)(xs2)(_ :: _)
   def append3[T](xs1: List[T], xs2: List[T]): List[T] = foldLeft(xs2)(xs1)((acc, x) => x :: acc)
+    // List#::: の実装は上の append を参照
 
+  //===== Exercise 3.15 =====
+  def concat[A](xss: List[List[A]]): List[A] = foldRight2(xss)(List[A]())(append2)
+  //def concat[A](xss: List[List[A]]): List[A] = xss.foldRight(List[A]())(_ ::: _)
+
+  //===== Exercise 3.16 =====
+  def addOne(xs: List[Int]): List[Int] = xs map (_ + 1)
+    // Another implementation
+    // def addOne(xs: List[Int]): List[Int] = xs.foldRight(List[Int]())((x, l) => (x + 1) :: l)
+    // 単純な再帰では末尾再帰にならないので効率が悪い
+ //===== Exercise 3.17 =====
+  def toStrings[A](xs: List[A]): List[String] = xs map (_.toString)
+  //def toStrings[A](xs: List[A]): List[String] =
+  //   xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
+
+  //===== Exercise 3.18 =====
+  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())((x, acc) => f(x) :: acc)
+
+  //===== Exercise 3.19 =====
+  def filter[A](xs: List[A])(f: A => Boolean): List[A] =
+      xs match {
+         case Nil => Nil
+         case x :: xs1 =>
+           if (f(x)) x :: filter(xs1)(f)
+           else filter(xs1)(f)
+      }
+
+    // FP in Scala
+    //-------------
+    // xs.foldRight(List[A]())((x, acc) => if (f(x)) x :: acc else acc)
+
+    // def TraversableLike#filter[A](f: A => Boolean): List[A] = filterImpl(f, isFlipped = false)
+    // def TraversableLike#filterNot[A](f: A => Boolean): List[A] = filterImpl(f, isFlipped = true)
+    // private[scala] def TraversableLike#filterImpl(f: A => Boolean, isFlipped: Boolean) = {
+    //   var b = newBuilder
+    //   for (x <- xs) {
+    //     if (f(x) != isFlipped) b += x
+    //   }
+    //   b.result
+    // }
 }
