@@ -146,14 +146,14 @@ class MyListSpec extends Specification with ScalaCheck {
   //===== Exercise 3.16 =====
   "addOne" should {
     "transform a list of integers by adding 1 to each element" ! forAll { xs: List[Int] =>
-      MyList.addOne(xs) must_== (for (x <- xs) yield x + 1)
+      MyList.addOne(xs) must_== { for (x <- xs) yield x + 1 }
     }
   }
 
   //===== Exercise 3.17 =====
   "toStrings" should {
     "turn each value in a list into a string" ! forAll { xs: List[Double] =>
-      (MyList toStrings xs) must_== (for (x <- xs) yield x.toString)
+      (MyList toStrings xs) must_== { for (x <- xs) yield x.toString }
     }
   }
 
@@ -161,7 +161,7 @@ class MyListSpec extends Specification with ScalaCheck {
   "map" should {
     "modify each element in a list while maintaining the structure of the list" !
       forAll { xs: List[Int] =>
-        MyList.map(xs)(_ + 1) must_== xs.map(_ + 1)
+        MyList.map(xs) { _ + 1 } must_== xs.map(_ + 1)
       }
   }
 
@@ -190,8 +190,24 @@ class MyListSpec extends Specification with ScalaCheck {
     "remove elements from a list unless they satisfy a given predicate" !
       forAll { xs: List[Int] => {
         def odd(n :Int): Boolean = n % 2 != 0
-        MyList.filterByFlatMap(xs)(odd) must_== (xs filter odd)
+        MyList.filterByFlatMap(xs)(odd) must_== xs.filter(odd)
       }
     }
+  }
+
+  //===== Exercise 3.22 =====
+  "zipWithPlus" should {
+    "accept two lists and construct a new list by adding corresponding elements" !
+      forAll { (xs: List[Int], ys: List[Int]) =>
+        MyList.zipWithPlus(xs)(ys) must_== MyList.zipWith2(xs)(ys) { _ + _ }
+      }
+  }
+
+  //===== Exercise 3.23 =====
+  "zipWith" should {
+    "accept two lists and construct a new list by applying a function to corresponding elements" !
+      forAll { (xs: List[Int], ys: List[Int]) =>
+        MyList.zipWith(xs)(ys) { _ * _ } must_== MyList.zipWith2(xs)(ys) { _ * _ }
+      }
   }
 }

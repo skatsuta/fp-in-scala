@@ -88,9 +88,9 @@ object MyList extends {
     //   reversed.foldLeft(acc)((x, y) => f(y, x))
   }
 
-  def sum2(xs: List[Int]): Int = foldRight(xs)(0)(_ + _)
+  def sum2(xs: List[Int]): Int = foldRight(xs)(0) { _ + _ }
 
-  def product2(xs: List[Double]): Double = foldRight(xs)(1.0)(_ * _)
+  def product2(xs: List[Double]): Double = foldRight(xs)(1.0) { _ * _ }
 
   // *** Exercise 3.7 ***
   // Can short-circuit because we can check the condition before calculating
@@ -105,7 +105,7 @@ object MyList extends {
   }
 
   //===== Exercise 3.9 =====
-  def length[T](xs: List[T]): Int = foldRight(xs)(0)((_, acc) => acc + 1)
+  def length[T](xs: List[T]): Int = foldRight(xs)(0) { (_, acc) => acc + 1 }
 
     // LinearSeqOptimized#length(List[T])
     //------------------------------------
@@ -133,11 +133,11 @@ object MyList extends {
   //===== Exercise 3.11 =====
   def sum(xs: List[Int]): Int = foldLeft(xs)(0)(_ + _)
   def product(xs: List[Double]): Double = foldLeft(xs)(1.0)(_ * _)
-  def length2[A](xs: List[A]): Int = foldLeft(xs)(0)((acc, _) => acc + 1)
+  def length2[A](xs: List[A]): Int = foldLeft(xs)(0) { (acc, _) => acc + 1 }
 
 
   //===== Exercise 3.12 =====
-  def reverse[A](xs: List[A]): List[A] = foldLeft(xs)(List[A]())((acc, x) => x :: acc)
+  def reverse[A](xs: List[A]): List[A] = foldLeft(xs)(List[A]()) { (acc, x) => x :: acc }
 
   //===== Exercise 3.13 =====
   def foldRight2[T, U](xs: List[T])(acc: U)(f: (T, U) => U): U =
@@ -147,8 +147,8 @@ object MyList extends {
     //    reverse.foldLeft(acc)((right, left) => f(left, right))
 
   //===== Exercise 3.14 =====
-  def append2[T](xs1: List[T], xs2: List[T]): List[T] = foldRight2(xs1)(xs2)(_ :: _)
-  def append3[T](xs1: List[T], xs2: List[T]): List[T] = foldLeft(xs2)(xs1)((acc, x) => x :: acc)
+  def append2[T](xs1: List[T], xs2: List[T]): List[T] = foldRight2(xs1)(xs2) { _ :: _ }
+  def append3[T](xs1: List[T], xs2: List[T]): List[T] = foldLeft(xs2)(xs1) { (acc, x) => x :: acc }
     // List#::: の実装は上の append を参照
 
   //===== Exercise 3.15 =====
@@ -166,7 +166,7 @@ object MyList extends {
   //   xs.foldRight(List[String]())((x, acc) => x.toString :: acc)
 
   //===== Exercise 3.18 =====
-  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]())(f(_) :: _)
+  def map[A, B](xs: List[A])(f: A => B): List[B] = xs.foldRight(List[B]()) { f(_) :: _ }
 
   //===== Exercise 3.19 =====
   def filter[A](xs: List[A])(f: A => Boolean): List[A] =
@@ -193,9 +193,22 @@ object MyList extends {
 
   //===== Exercise 3.20 =====
   //def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = (xs map f).flatten
-  def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = xs.foldRight(List[B]())(f(_) ::: _)
+  def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = (xs foldRight List[B]()) { f(_) ::: _ }
 
   //===== Exercise 3.21 =====
   def filterByFlatMap[A](xs: List[A])(f: A => Boolean): List[A] =
-      flatMap(xs)(x => if (f(x)) List(x) else Nil)
+      flatMap(xs) { x => if (f(x)) List(x) else Nil }
+
+  //===== Exercise 3.22, 3.23 =====
+  def zipWith[A, B, C](xs: List[A])(ys: List[B])(f: (A, B) => C): List[C] =
+      xs zip ys map { case (x, y) => f(x, y) }
+
+  def zipWithPlus(xs: List[Int])(ys: List[Int]): List[Int] = zipWith(xs)(ys) { _ + _ }
+
+  // テスト用の別実装
+  def zipWith2[A, B, C](xs: List[A])(ys: List[B])(f: (A, B) => C): List[C] = (xs, ys) match {
+    case (x :: xs1, y :: ys1) => f(x, y) :: zipWith2(xs1)(ys1)(f)
+    case _ => Nil
+  }
+
 }
