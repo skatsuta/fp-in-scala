@@ -174,4 +174,13 @@ class MyListSpec extends Specification with ScalaCheck {
       }
     }
   }
+
+  //===== Exercise 3.20 =====
+  "flatMap" should {
+    "build a new collection by applying a function to all elements of this list" !
+      forAll { xs: List[Int] =>
+        MyList.flatMap(xs)(x => List(x, x)) must_==
+          (for (x <- xs) yield List(x, x)).foldRight(List[Int]())(_ ::: _)
+      }
+  }
 }

@@ -190,4 +190,7 @@ object MyList extends {
     //   }
     //   b.result
     // }
+
+  //===== Exercise 3.20 =====
+  def flatMap[A, B](xs: List[A])(f: A => List[B]): List[B] = (xs map f).flatten
 }
