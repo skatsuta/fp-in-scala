@@ -38,4 +38,12 @@ class TreeSpec extends Specification with ScalaCheck {
     //  Branch(n).depth must_== 1
     //}
   }
+
+  //===== Exercise 3.28 =====
+  "map" should {
+    "return Leaf(2) when (_ + 1) maps over Leaf(1)" in { (Leaf(1) map { _ + 1 }) must_== Leaf(2) }
+    "return Branch(Leaf(2), Leaf(4)) when (_ * 1) maps over Branch(Leaf(1), Leaf(2))" in {
+      (Branch(Leaf(1), Leaf(2)) map { _ * 2 }) must_== Branch(Leaf(2), Leaf(4))
+    }
+  }
 }

@@ -32,6 +32,12 @@ sealed trait Tree[+A] {  // 型パラメータの前に共変アノテーショ�
     // 10. すべての英字
     // 11. すべて代入演算子
   }
+
+  //===== Exercise 3.28 =====
+  def map[B](f: A => B): Tree[B] = this match {
+    case Leaf(x) => Leaf(f(x))
+    case Branch(l, r) => Branch(l map f, r map f)
+  }
 }
 
 case class Leaf[A](value: A) extends Tree[A]
