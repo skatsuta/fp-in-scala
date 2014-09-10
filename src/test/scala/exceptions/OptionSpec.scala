@@ -12,9 +12,9 @@ class OptionSpec extends Specification with ScalaCheck {
     }
   }
 
-//  "flatMap" should {
-//    "return None when applied to None" in { ((None) flatMap {_ + 1}) must_== None }
-//  }
+  //"flatMap" should {
+  //  "return None when applied to None" in { (None flatMap { _ find (x => x % 2 == 0) }) must_== None }
+  //}
 
   "getOrElse" should {
     "return the default value when applied to None" ! forAll { default: String =>
