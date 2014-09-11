@@ -57,5 +57,15 @@ class OptionSpec extends Specification with ScalaCheck {
       Some(a).lift2(add)(Some(b)) must_== Some(add(a)(b))
     }
   }
+
+//  "sequence" should {
+//    "return None if the original list contains None" ! forAll { a: Int =>
+//      Some(a).sequence(List(Some(a), Some(a), None)) must_== None
+//    }
+//    "combine a list of Options into one Option containing a list of all the Some values in the original list" !
+//    forAll { (a: Int, b: Int, c: Int) =>
+//      Some(a).sequence(List(Some(a), Some(a), Some(c))) must_== Some(List(a, b, c))
+//    }
+//  }
 }
 

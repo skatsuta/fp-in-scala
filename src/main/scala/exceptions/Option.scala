@@ -43,10 +43,15 @@ sealed trait Option[+A] {
 
   //===== Exercise 4.3 =====
   // map2 ではなく lift2
-  def lift2[B, C](f: A => B => C): Option[B] => Option[C] = this match {
+  def lift2[B, C](f: (A, B) => C): Option[B] => Option[C] = this match {
     case None => _ => None
-    case Some(x) => _ map f(x)
+    case Some(x) => _ map { a => f(x, a) }
   }
+
+  //===== Exercise 4.4 =====
+//  def sequence[A](xs: List[Option[A]]): Option[List[A]] = xs.foldRight(Some(List[A]())) {
+//    (x, acc) => x.lift2((a: A, as: List[A]) => a :: as)(acc)
+//  }
 }
 
 case class Some[+A](get: A) extends Option[A]
