@@ -6,8 +6,11 @@ object Stat {
     else Some(xs.sum / xs.length)
 
   def variance(xs: Seq[Double]): Option[Double] = {
-    val m = mean(xs).getOrElse(0.0)
-    val diffSquares = xs map { x => math.pow(x - m, 2.0) }
-    mean(diffSquares)
+    mean(xs) flatMap { m => mean(xs map { x => math.pow(x - m, 2.0) }) }
+
+    // 最初の実装
+    //val m = mean(xs).getOrElse(0.0)
+    //val diffSquares = xs map { x => math.pow(x - m, 2.0) }
+    //mean(diffSquares)
   }
 }

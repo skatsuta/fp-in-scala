@@ -34,7 +34,15 @@ sealed trait Option[+A] {
     // 別の実装例
     // flatMap { x => if (f(x)) Some(x) else None }
   }
+
+  def lift[A, B](f: A => B): Option[A] => Option[B] = _ map f
+
+  def Try[A](x: => A): Option[A] =
+    try Some(x)
+    catch { case e: Exception => None }
 }
 
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
+
+
