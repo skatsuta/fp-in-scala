@@ -44,4 +44,14 @@ class OptionSpec extends Specification with ScalaCheck {
       Some(n).filter { (_: Int) % 2 == 0 } must_== (if (n % 2 == 0) Some(n) else None)
     }
   }
+
+  "lift2" should {
+    "return None when applied to None" ! forAll { (a: Int, b: Int, c: Int) =>
+      None.lift2((x: Int) => (y: Int) => x + y)(Some(b)) must_== None
+    }
+    "combine two Option values using a binary function" ! forAll { (a: Int, b: Int) =>
+      Some(a).lift2(a => (b: Int) => a + b) must beAnInstanceOf[Int => Int => Int]
+    }
+  }
 }
+

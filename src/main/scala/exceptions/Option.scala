@@ -40,9 +40,14 @@ sealed trait Option[+A] {
   def Try[A](x: => A): Option[A] =
     try Some(x)
     catch { case e: Exception => None }
+
+  //===== Exercise 4.3 =====
+  // map2 ではなく lift2
+  def lift2[B, C](f: A => B => C): Option[B] => Option[C] = this match {
+    case None => _ => None
+    case Some(x) => _ map f(x)
+  }
 }
 
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
-
-
