@@ -48,11 +48,20 @@ sealed trait Option[+A] {
     case Some(x) => _ map { a => f(x, a) }
   }
 
-  //===== Exercise 4.4 =====
-//  def sequence[A](xs: List[Option[A]]): Option[List[A]] = xs.foldRight(Some(List[A]())) {
-//    (x, acc) => x.lift2((a: A, as: List[A]) => a :: as)(acc)
-//  }
+
 }
 
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
+
+object Option {
+  //===== Exercise 4.4 =====
+//  def sequence[A](xs: List[Option[A]]): Option[List[A]] = xs.foldRight(Some(List[A]())) {
+//    (x, acc) => x.lift2((a: A, as: List[A]) => a :: as)(acc)
+//  }
+
+//  def parseInts(ss: List[String]): Option[List[Int]] = ss.sequence(s map { i => Try(i.toInt) })
+
+  //===== Exercise 4.5 =====
+  //def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+}
