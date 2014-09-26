@@ -18,10 +18,32 @@ class EitherSpec extends Specification with ScalaCheck {
 
   "flatMap" should {
     "return Left if applied to Left" ! forAll { str: String =>
-      Left(str).flatMap(x => Right(x)) must_== Left(str)
+      Left(str).flatMap(Right(_)) must_== Left(str)
     }
     "return Right if applied to Right" ! forAll { x: Int =>
-      Right(x).flatMap(x => Right(x)) must_== Right(x)
+      Right(x).flatMap(Right(_)) must_== Right(x)
+    }
+  }
+
+  "orElse" should {
+    "return the argument itself if applied to Left" ! forAll { (str: String, x: Int) =>
+      Left(str).orElse(Right(x)) must_== Right(x)
+    }
+    "return Right if applied to Right" ! forAll { (str: String, x: Int) =>
+      Right(x).orElse(Left(str)) must_== Right(x)
+    }
+  }
+
+  "map2" should {
+    def add(a: Int, b: Int) = a + b
+    "return Left if the receiver is Left" ! forAll { (str: String, x: Int, y: Int) =>
+      Left(str).map2(Right(x)) { add(_, _) } must_== Left(str)
+    }
+    "return Left if the first argument is Left" ! forAll { (str: String, x: Int) =>
+      Right(x).map2(Left(str)) { add(_, _) } must_== Left(str)
+    }
+    "return the f-applied value wrapped by Right if both Right" ! forAll { (x: Int, y: Int) =>
+      Right(x).map2(Right(y)) { add(_, _) } must_== Right(add(x, y))
     }
   }
 }
