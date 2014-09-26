@@ -45,16 +45,16 @@ class OptionSpec extends Specification with ScalaCheck {
     }
   }
 
-  "lift2" should {
-    def add: (Int, Int) => Int = (x, y) => x + y
+  //===== Exercise 4.3 =====
+  "map2" should {
+    def add(x: Int, y: Int): Int = x + y
 
-    "be an instance of [Int => Int => Int]" ! forAll { a: Int =>
-      Some(a).lift2(add) must beAnInstanceOf[Int => Int => Int]
+    "return None if a receiver or the first argument is None" ! forAll { x: Int =>
+      None.map2(Some(x))(add) must_== None
+      Some(x).map2(None)(add) must_== None
     }
-    "return None when the receiver is None" ! forAll { b: Int => None.lift2(add)(Some(b)) must_== None }
-    "return None when applied to None" ! forAll { a: Int => Some(a).lift2(add)(None) must_== None }
-    "combine two Option values using a binary function" ! forAll { (a: Int, b: Int) =>
-      Some(a).lift2(add)(Some(b)) must_== Some(add(a, b))
+    "combine two Option values using a binary function" ! forAll { (x: Int, y: Int) =>
+      Some(x).map2(Some(y))(add) must_== Some(add(x, y))
     }
   }
 

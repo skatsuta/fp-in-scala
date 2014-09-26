@@ -42,10 +42,9 @@ sealed trait Option[+A] {
     catch { case e: Exception => None }
 
   //===== Exercise 4.3 =====
-  // map2 ではなく lift2
-  def lift2[B, C](f: (A, B) => C): Option[B] => Option[C] = this match {
-    case None => _ => None
-    case Some(x) => _ map { a => f(x, a) }
+  def map2[B, C](b: Option[B])(f: (A, B) => C): Option[C] = this match {
+    case None => None
+    case Some(x) => b map { a => f(x, a) }
   }
 
 
