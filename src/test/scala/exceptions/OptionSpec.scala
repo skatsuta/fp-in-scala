@@ -12,9 +12,9 @@ class OptionSpec extends Specification with ScalaCheck {
     }
   }
 
-  //"flatMap" should {
-  //  "return None when applied to None" in { (None flatMap { _ find (x => x % 2 == 0) }) must_== None }
-  //}
+  "flatMap" should {
+    "return None when applied to None" in { (None flatMap { x => Some(x) }) must_== None }
+  }
 
   "getOrElse" should {
     "return the default value when applied to None" ! forAll { default: String =>
@@ -46,12 +46,26 @@ class OptionSpec extends Specification with ScalaCheck {
   }
 
   "lift2" should {
-    "return None when applied to None" ! forAll { (a: Int, b: Int, c: Int) =>
-      None.lift2((x: Int) => (y: Int) => x + y)(Some(b)) must_== None
+    def add: (Int, Int) => Int = (x, y) => x + y
+
+    "be an instance of [Int => Int => Int]" ! forAll { a: Int =>
+      Some(a).lift2(add) must beAnInstanceOf[Int => Int => Int]
     }
+    "return None when the receiver is None" ! forAll { b: Int => None.lift2(add)(Some(b)) must_== None }
+    "return None when applied to None" ! forAll { a: Int => Some(a).lift2(add)(None) must_== None }
     "combine two Option values using a binary function" ! forAll { (a: Int, b: Int) =>
-      Some(a).lift2(a => (b: Int) => a + b) must beAnInstanceOf[Int => Int => Int]
+      Some(a).lift2(add)(Some(b)) must_== Some(add(a, b))
     }
   }
+
+//  "sequence" should {
+//    "return None if the original list contains None" ! forAll { a: Int =>
+//      Some(a).sequence(List(Some(a), Some(a), None)) must_== None
+//    }
+//    "combine a list of Options into one Option containing a list of all the Some values in the original list" !
+//    forAll { (a: Int, b: Int, c: Int) =>
+//      Some(a).sequence(List(Some(a), Some(a), Some(c))) must_== Some(List(a, b, c))
+//    }
+//  }
 }
 
